@@ -64,7 +64,7 @@ const Feed = () => {
     }
   };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////
   const handleCommentChange = (postId, text) => {
     setComment(prev => ({ ...prev, [postId]: text }));
   };
@@ -93,16 +93,8 @@ const Feed = () => {
   };
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const someoneprofile=async(e,postId)=>{
-  e.preventDefault();
-    const res = await axios.get(
-        `http://localhost:4000/users/kisika/${postId}`,
-        {  },
-        { withCredentials: true }
-      );
-}
 
   useEffect(() => {
     if (user === null) {
@@ -137,16 +129,21 @@ const someoneprofile=async(e,postId)=>{
       <div className="space-y-6">
         {posts.map((post) => (
           <div key={post._id} className="relative bg-rose-100 p-4 rounded-2xl shadow-2xl">
-              <Link to="/kisika" onClick={(e)=>someoneprofile(e,post._id)}>
-            <div className=" flex space-x-4 mb-2">
-              <img
-                src={`http://localhost:4000/images/uploads/${post.user?.profilepic || "default.png"}`}
-                alt="User"
-                className="w-10 h-10 rounded-full object-cover"
-                />
-              <span className="font-semibold pt-2">@{post.user?.username}</span>
-            </div>
-                </Link>
+
+            {post.user && post.user._id && (
+              <Link to={`/someoneprofile/${post.user._id}`}>
+                <div className="flex space-x-4 mb-2">
+                  <img
+                    src={`http://localhost:4000/images/uploads/${post.user.profilepic || "default.png"}`}
+                    alt="User"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span className="font-semibold pt-2">@{post.user.username}</span>
+                </div>
+              </Link>
+            )}
+
+
             {post.image && (
               <img
                 src={`http://localhost:4000/images/uploads/${post.image}`}

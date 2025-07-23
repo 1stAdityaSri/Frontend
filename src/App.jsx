@@ -5,7 +5,7 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Edit from './pages/Edit'
 import Feed from './pages/Feed'
-import Kisika from './pages/Kisika'
+import Someoneprofile from './pages/Someoneprofile'
 
 
 import { UserDataContext } from './context/UserContext'
@@ -20,7 +20,7 @@ const App = () => {
           <Route path='/profile' element={<Profile/>}/>
           <Route path='/edit/:id' element={<Edit />} />
           <Route path='/' element={<Feed />} />
-           <Route path='/kisika' element={<Kisika />} />
+           <Route path='/someoneprofile/:id' element={<Someoneprofile />} />
 
 
       </Routes>
