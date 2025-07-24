@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { UserDataContext } from "../context/UserContext";
+
 import axios from 'axios';
 
 const Someoneprofile = () => {
   const { id } = useParams(); // This is the user's ID from URL
+  const { user, setuser } = useContext(UserDataContext);
+
   const [profile, setProfile] = useState(null);
-const [userPosts, setUserPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
 
 
-useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const res = await axios.get(`http://localhost:4000/users/someoneprofile/${id}`, {
-        withCredentials: true,
-      });
-      setProfile(res.data.user);
-      setUserPosts(res.data.posts);
-    } catch (err) {
-      console.error("Error fetching user profile", err);
-    }
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`http://localhost:4000/users/someoneprofile/${id}`, {
+          withCredentials: true,
+        });
+        setProfile(res.data.user);
+        setUserPosts(res.data.posts);
+      } catch (err) {
+        console.error("Error fetching user profile", err);
+      }
+    };
 
-  fetchProfile();
-}, [id]);
+    fetchProfile();
+  }, [id]);
 
 
 
@@ -38,14 +42,16 @@ useEffect(() => {
   return (
     <div className="p-4">
       <div className="flex items-center space-x-4 mb-6">
-        <img
-          src={`http://localhost:4000/images/uploads/${profile.profilepic}`}
-          alt="Profile"
-          className="w-16 h-16 rounded-full"
-        />
-        <div>
-          <h2 className="text-xl font-bold">@{profile.username}</h2>
-          <p className="text-gray-600">{profile.email}</p>
+      <div>
+        <img className="w-20 h-20 object-cover" src={`http://localhost:4000/images/uploads/${profile?.profilepic || "default.png"}`} alt="Profile" />
+        <h2 className="text-xl font-bold">@{profile.username}</h2>
+      </div>
+        <div className='flex flex-row font-bold' >
+          <h1 className=" mt-5 ml-20">Followers</h1>
+          <h1 className="  mt-5 ml-5">{profile.followers.length}</h1>
+          <h1 className="mt-5 ml-20">Following</h1>
+          <h1 className=" mt-5 ml-5 ">{profile.following.length}</h1>
+
         </div>
       </div>
 

@@ -127,11 +127,17 @@ const Profile = () => {
           Logout
         </button>
       </div>
-      <div className="w-20 h-20 rounded-lg">
-
-        <img className="w-full h-full object-cover" src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
+      <div className=" rounded-lg">
 
 
+        <div className='flex flex-row font-bold' >
+          <img className="w-20 h-20 object-cover" src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
+          <h1 className=" mt-5 ml-20">Followers</h1>
+          <h1 className="  mt-5 ml-5">{user.followers.length}</h1>
+          <h1 className="mt-5 ml-20">Following</h1>
+          <h1 className=" mt-5 ml-5 ">{user.following.length}</h1>
+
+        </div>
 
       </div>
       <form onSubmit={uploadhandler} className="my-4" encType="multipart/form-data">

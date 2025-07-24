@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { UserDataContext } from '../context/UserContext';
 import { Link, useNavigate } from 'react-router-dom'
+import "@copilotkit/react-ui/styles.css";
+import { CopilotPopup } from "@copilotkit/react-ui";
 
 const Feed = () => {
 
@@ -11,18 +13,25 @@ const Feed = () => {
     backgroundPosition: "center",
     height: "100vh",
   };
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followingState, setFollowingState] = useState({});
+
   const [comment, setComment] = useState({});
   const [posts, setPosts] = useState([]);
-  const { user } = useContext(UserDataContext);
+  const { user, loading } = useContext(UserDataContext);
+
   const [openComments, setOpenComments] = useState({});
 
   const navigate = useNavigate()
+
   const toggleComments = (postId) => {
     setOpenComments((prev) => ({
       ...prev,
       [postId]: !prev[postId], // toggle true/false
     }));
   };
+
+
 
 
   useEffect(() => {
@@ -40,6 +49,19 @@ const Feed = () => {
 
     fetchAllPosts();
   }, []);
+
+  useEffect(() => {
+    if (user && posts.length > 0) {
+      const initialState = {};
+      posts.forEach((post) => {
+        if (post.user && post.user._id) { // ✅ SAFETY
+          const targetUserId = post.user._id;
+          initialState[targetUserId] = user.following.includes(targetUserId);
+        }
+      });
+      setFollowingState(initialState);
+    }
+  }, [user, posts]);
 
 
   const likehandler = async (e, postId) => {
@@ -93,24 +115,51 @@ const Feed = () => {
   };
 
 
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  const followHandler = async (e, userId) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        `http://localhost:4000/users/follow/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      setFollowingState(prev => ({
+        ...prev,
+        [userId]: res.data.isFollowing,
+      }));
+    } catch (err) {
+      console.error("Follow failed", err);
+    }
+  };
+
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   useEffect(() => {
-    if (user === null) {
+    if (!loading && user === null) {
       navigate("/login");
     }
-  }, [user, navigate]);
+  }, [loading, user, navigate]);
 
-  if (user === undefined) {
+
+
+  if (loading || user === undefined) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-rose-400 to-orange-300">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white"></div>
-        <div className="text-white mt-4">Loading...</div>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-rose-400 to-orange-300">
+        <div className="text-white text-lg">Loading user...</div>
       </div>
     );
-
   }
+
+
+
 
 
   return (
@@ -119,11 +168,14 @@ const Feed = () => {
       <div className="userprofile flex justify-between">
         <h1 className="text-2xl font-bold mb-4 text-center">Instagram</h1>
         <h2 className="text-2xl font-bold mb-4 text-center">Explore Posts</h2>
-        <Link to="/profile"><img
-          src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`}
-          alt="User"
-          className="w-10 h-10 rounded-full object-cover"
-        />{user.name}</Link>
+        <Link to="/profile">
+          <img
+            src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`}
+            alt="User"
+            className="w-10 h-10 rounded-full object-cover"
+          />
+          {user?.name || "Loading..."}
+        </Link>
       </div>
 
       <div className="space-y-6">
@@ -131,16 +183,30 @@ const Feed = () => {
           <div key={post._id} className="relative bg-rose-100 p-4 rounded-2xl shadow-2xl">
 
             {post.user && post.user._id && (
-              <Link to={`/someoneprofile/${post.user._id}`}>
-                <div className="flex space-x-4 mb-2">
+              <div className="flex justify-between">
+
+                <Link className="flex mb-3" to={`/someoneprofile/${post.user._id}`}>
+
                   <img
                     src={`http://localhost:4000/images/uploads/${post.user.profilepic || "default.png"}`}
                     alt="User"
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <span className="font-semibold pt-2">@{post.user.username}</span>
-                </div>
-              </Link>
+
+                </Link>
+                {post.user && post.user._id && post.user._id !== user._id && (
+                  <button
+                    onClick={(e) => followHandler(e, post.user._id)}
+                    className="bg-black h-min px-2 rounded-md mr-5 mt-1 text-white"
+                  >
+                    {followingState[post.user._id] ? "Unfollow" : "Follow"}
+                  </button>
+                )}
+
+
+
+              </div>
             )}
 
 
@@ -187,6 +253,13 @@ const Feed = () => {
 
         ))}
       </div>
+      <CopilotPopup
+        instructions={"You are assisting the user as best as you can. Answer in the best way possible given the data you have."}
+        labels={{
+          title: "Popup Assistant",
+          initial: "Need any help?",
+        }}
+      />
     </div>
   );
 };
