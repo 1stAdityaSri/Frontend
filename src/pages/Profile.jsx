@@ -121,9 +121,9 @@ const Profile = () => {
 
   const imageSrc = user?.profilepic ? user.profilepic : "default.png";
   return (
-    <div className="bg-teal-600 w-full h-full p-4 flex flex-col">
+    <div className="bg-black text-white w-full h-full p-4 flex flex-col">
       <div className="w-full flex justify-end">
-        <button onClick={logouthandler} className="bg-black text-white px-4 py-2 rounded-2xl">
+        <button onClick={logouthandler} className="bg-white text-black px-4 py-2 rounded-2xl">
           Logout
         </button>
       </div>
@@ -131,7 +131,7 @@ const Profile = () => {
 
 
         <div className='flex flex-row font-bold' >
-          <img className="w-20 h-20 object-cover" src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
+          <img className="w-20 h-20 rounded-full object-cover" src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
           <h1 className=" mt-5 ml-20">Followers</h1>
           <h1 className="  mt-5 ml-5">{user.followers.length}</h1>
           <h1 className="mt-5 ml-20">Following</h1>
@@ -140,9 +140,10 @@ const Profile = () => {
         </div>
 
       </div>
-      <form onSubmit={uploadhandler} className="my-4" encType="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required />
-        <button type="submit" className="ml-2 bg-blue-500 text-white px-3 py-1 rounded">
+        <p1 className="mt-2">this is my bio how we do it yo yo my name is aditya  </p1>
+      <form onSubmit={uploadhandler} className="my-4 " encType="multipart/form-data">
+        <input type="file" name="image" className='rounded-3xl bg-gradient-to-r from-rose-400 to-orange-300'  accept="image/*" required />
+        <button type="submit" className="ml-2 bg-gradient-to-r from-violet-600 to-orange-300 text-white px-3 py-1 rounded">
           Change DP
         </button>
       </form>
@@ -152,17 +153,17 @@ const Profile = () => {
 
       <form onSubmit={posthandler} encType="multipart/form-data" className="flex flex-col">
 
-        <textarea className="border-gray-300 p-3 bg-gray-200" placeholder="write here" name="content" />
-        <input type="file" name="image" accept="image/*" className="my-2" />
-        <input className="mt-3 bg-yellow-500 rounded-md w-fit px-3 py-1" type="submit" value="Post" />
+        <textarea className=" p-3 text-gray-300 rounded-md bg-gray-700" placeholder="write here" name="content" />
+        <input  type="file" name="image" accept="image/*" className="my-2 w-min rounded-3xl bg-gradient-to-r from-rose-400 to-orange-300 " />
+        <input className="mt-3 bg-gradient-to-r from-violet-600 to-orange-300 rounded-md w-fit px-3 py-1" type="submit" value="Post" />
       </form>
 
 
-      <div className="posts mt-10">
-        <h3 className="text-gray-800 ml-5">Your posts</h3>
+      <div className="posts  mt-10">
+        <h3 className="ml-5">Your posts</h3>
         <div className="postcontainer text-white">
           {posts.length > 0 ? posts.reverse().map((post) => (
-            <div key={post._id} className="post bg-slate-800 shadow-2xl text-white rounded-md mx-3 p-3 my-3">
+            <div key={post._id} className="post bg-gradient-to-r from-violet-600 to-pink-700 shadow-2xl text-white rounded-md mx-3 p-3 my-3">
               <h4>@{user?.username}</h4>
 
               {post.image && (
