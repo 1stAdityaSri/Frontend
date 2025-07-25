@@ -37,7 +37,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/users/allposts", {
+        const res = await axios.get(`${process.env.REACT_APP_URL}/users/allposts`, {
           withCredentials: true
         });
         // setuser(res.data.user)
@@ -68,7 +68,7 @@ const Feed = () => {
     e.preventDefault();
     try {
       await axios.get(
-        `http://localhost:4000/users/like/${postId}`,
+        `${process.env.REACT_APP_URL}/users/like/${postId}`,
         { withCredentials: true }
       );
 
@@ -95,7 +95,7 @@ const Feed = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:4000/users/comment/${postId}`,
+        `${process.env.REACT_APP_URL}/users/comment/${postId}`,
         { text: comment[postId] },
         { withCredentials: true }
       );
@@ -124,7 +124,7 @@ const Feed = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:4000/users/follow/${userId}`,
+        `${process.env.REACT_APP_URL}/users/follow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -172,7 +172,7 @@ const Feed = () => {
           <img
             src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`}
             alt="User"
-            className="w-10 h-10 rounded-full object-cover"
+            className="profilepic rounded-full object-cover" 
           />
           {user?.name || "Loading..."}
         </Link>

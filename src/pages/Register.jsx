@@ -25,7 +25,7 @@ const Register = () => {
 
   try {
     const response = await axios.post(
-      'http://localhost:4000/users/register',
+      `${process.env.REACT_APP_URL}/users/register`,
       newUser,
       { withCredentials: true }
     );

@@ -15,7 +15,7 @@ const Edit = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/users/edit/${id}`, {
+        const res = await axios.get(`${process.env.REACT_APP_URL}/users/edit/${id}`, {
           withCredentials: true
         });
         setContent(res.data.post.content);
@@ -33,7 +33,7 @@ const Edit = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:4000/users/update/${id}`,
+        `${process.env.REACT_APP_URL}/users/update/${id}`,
         { content },
         {image},
         { withCredentials: true }
@@ -49,7 +49,7 @@ const Edit = () => {
   if (!confirmDelete) return;
 
   try {
-    await axios.delete(`http://localhost:4000/users/delete/${id}`, {
+    await axios.delete(`${process.env.REACT_APP_URL}/users/delete/${id}`, {
       withCredentials: true
     });
 
@@ -71,7 +71,7 @@ const Edit = () => {
       <form onSubmit={handleUpdate} className="flex flex-col p-6 max-w-lg mx-auto w-full space-y-4">
            {post.image && (
               <img
-                src={`http://localhost:4000/images/uploads/${post.image}`}
+                src={`${process.env.REACT_APP_URL}/images/uploads/${post.image}`}
                 alt="Post"
                 className="w-full mb-2 rounded"
               />

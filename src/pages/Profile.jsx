@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UserDataContext } from "../context/UserContext";
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-
-
+import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Profile = () => {
   const { user, setuser } = useContext(UserDataContext);
@@ -12,7 +12,7 @@ const Profile = () => {
 
   const logouthandler = async () => {
     try {
-      await axios.get("http://localhost:4000/users/logout", {
+      await axios.get(`${process.env.REACT_APP_URL}/users/logout`, {
         withCredentials: true
       });
 
@@ -33,7 +33,7 @@ const Profile = () => {
     console.log("hua upload")
     try {
       const res = await axios.post(
-        "http://localhost:4000/users/upload", formData, { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true });
+        `${process.env.REACT_APP_URL}/users/upload`, formData, { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true });
 
       // Refresh the page or refetch profile info
       window.location.reload();
@@ -55,7 +55,7 @@ const Profile = () => {
 
     try {
       await axios.post(
-        "http://localhost:4000/users/post",
+        `${process.env.REACT_APP_URL}/users/post`,
         formData,
         {
           withCredentials: true,
@@ -74,7 +74,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       await axios.get(
-        `http://localhost:4000/users/like/${postId}`,
+        `${process.env.REACT_APP_URL}/users/like/${postId}`,
         { withCredentials: true }
       );
 
@@ -102,7 +102,7 @@ const Profile = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:4000/users/profile',
+          `${process.env.REACT_APP_URL}/users/profile`,
           { withCredentials: true }
         );
         setPosts(response.data.posts);
@@ -122,7 +122,9 @@ const Profile = () => {
   const imageSrc = user?.profilepic ? user.profilepic : "default.png";
   return (
     <div className="bg-black text-white w-full h-full p-4 flex flex-col">
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-between">
+        <Link to="/" className=''> <IoArrowBackOutline size={30} /></Link>
+       
         <button onClick={logouthandler} className="bg-white text-black px-4 py-2 rounded-2xl">
           Logout
         </button>
@@ -131,7 +133,7 @@ const Profile = () => {
 
 
         <div className='flex flex-row font-bold' >
-          <img className="w-20 h-20 rounded-full object-cover" src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
+          <img className="w-20 h-20 rounded-full object-cover" src={`${process.env.REACT_APP_URL}/images/uploads/${user?.profilepic || "default.png"}`} alt="Profile" />
           <h1 className=" mt-5 ml-20">Followers</h1>
           <h1 className="  mt-5 ml-5">{user.followers.length}</h1>
           <h1 className="mt-5 ml-20">Following</h1>
@@ -168,7 +170,7 @@ const Profile = () => {
 
               {post.image && (
                 <img
-                  src={`http://localhost:4000/images/uploads/${post.image}`}
+                  src={`${process.env.REACT_APP_URL}/images/uploads/${post.image}`}
                   alt="Post"
                   className="w-full mb-2 rounded"
                 />
