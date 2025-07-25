@@ -9,7 +9,7 @@ const UserContext = ({ children }) => {
 
   useEffect(() => {
     // Try to get the current logged-in user
-    axios.get("http://localhost:4000/users/profile", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_URL}/users/profile`, { withCredentials: true })
       .then((res) => {
         setuser(res.data.user); // success
       })
