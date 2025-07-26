@@ -170,7 +170,7 @@ const Feed = () => {
         <h2 className="text-2xl font-bold mb-4 text-center">Explore Posts</h2>
         <Link to="/profile">
           <img
-            src={`http://localhost:4000/images/uploads/${user?.profilepic || "default.png"}`}
+            src={`${process.env.REACT_APP_URL}/images/uploads/${user?.profilepic || "default.png"}`}
             alt="User"
             className="profilepic rounded-full object-cover" 
           />
@@ -188,7 +188,7 @@ const Feed = () => {
                 <Link className="flex mb-3" to={`/someoneprofile/${post.user._id}`}>
 
                   <img
-                    src={`http://localhost:4000/images/uploads/${post.user.profilepic || "default.png"}`}
+                    src={`${process.env.REACT_APP_URL}/images/uploads/${post.user.profilepic || "default.png"}`}
                     alt="User"
                     className="w-10 h-10 rounded-full object-cover"
                   />
@@ -212,7 +212,7 @@ const Feed = () => {
 
             {post.image && (
               <img
-                src={`http://localhost:4000/images/uploads/${post.image}`}
+                src={`${process.env.REACT_APP_URL}/images/uploads/${post.image}`}
                 alt="Post"
                 className="w-full mb-2 rounded"
               />
